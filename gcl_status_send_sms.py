@@ -1,3 +1,4 @@
+import random
 import requests
 import sys
 import time
@@ -62,12 +63,24 @@ print(message_body)
 #sys.exit(0)
 crawl_delay = 600
 # CHANGE TO while true
+time_offset = 0
 while True:
-#for i in range(2):
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     #print("Current Time =", current_time)
-    page = requests.get(URL)
+    try:
+        page = requests.get(URL)
+    except ConnectionError:
+        print('Connection error')
+        message = client.messages.create(
+                              body='Connection error: connection reset',
+                              from_=twilio_number,
+                              to=my_number
+                          )
+        time.sleep(20)
+        continue
+    except KeyboardInterrupt:
+        print('Ended')
     soup = BeautifulSoup(page.content, 'html.parser')
     results = soup.find('div', {'title':'Availability'})
     # REMOVE not
@@ -80,5 +93,6 @@ while True:
                               to=my_number
                           )
         break
-    time.sleep(crawl_delay)
+    time_offset = random.randrange(-50,50)
+    time.sleep(crawl_delay+time_offset)
 
