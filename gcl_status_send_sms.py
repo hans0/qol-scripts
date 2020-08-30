@@ -34,10 +34,6 @@ rp.read()
 if rp.crawl_delay(rp) != None:
     crawl_delay = rp.crawl_delay(rp)
 
-# REMOVE
-print(crawl_delay)
-#sys.exit(0)
-
 if account_sid == '' or auth_token == '' or twilio_number == '' or my_number == '':
     print('ERROR: Didn\'t find all relevant info')
     sys.exit(1)
@@ -51,9 +47,6 @@ message = client.messages.create(
                         from_=twilio_number,
                         to=my_number
                 )
-# REMOVE
-#sys.exit(0)
-print(type(message))
 
 URL = url+'gc-loader-pnp.html'
 
@@ -95,4 +88,3 @@ while True:
         break
     time_offset = random.randrange(-50,50)
     time.sleep(crawl_delay+time_offset)
-
